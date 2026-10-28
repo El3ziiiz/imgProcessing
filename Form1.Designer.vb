@@ -26,8 +26,11 @@ Partial Class Form1
         PictureBox1 = New PictureBox()
         PictureBox2 = New PictureBox()
         ComboBox1 = New ComboBox()
+        PictureBox3 = New PictureBox()
+        txtK = New TextBox()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox2, ComponentModel.ISupportInitialize).BeginInit()
+        CType(PictureBox3, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' TextBox1
@@ -39,7 +42,7 @@ Partial Class Form1
         ' 
         ' PictureBox1
         ' 
-        PictureBox1.Location = New Point(112, 111)
+        PictureBox1.Location = New Point(36, 111)
         PictureBox1.Name = "PictureBox1"
         PictureBox1.Size = New Size(270, 200)
         PictureBox1.TabIndex = 1
@@ -47,7 +50,7 @@ Partial Class Form1
         ' 
         ' PictureBox2
         ' 
-        PictureBox2.Location = New Point(532, 111)
+        PictureBox2.Location = New Point(370, 111)
         PictureBox2.Name = "PictureBox2"
         PictureBox2.Size = New Size(270, 200)
         PictureBox2.TabIndex = 2
@@ -61,19 +64,37 @@ Partial Class Form1
         ComboBox1.Size = New Size(121, 23)
         ComboBox1.TabIndex = 3
         ' 
+        ' PictureBox3
+        ' 
+        PictureBox3.Location = New Point(677, 111)
+        PictureBox3.Name = "PictureBox3"
+        PictureBox3.Size = New Size(270, 200)
+        PictureBox3.TabIndex = 4
+        PictureBox3.TabStop = False
+        ' 
+        ' txtK
+        ' 
+        txtK.Location = New Point(615, 388)
+        txtK.Name = "txtK"
+        txtK.Size = New Size(100, 23)
+        txtK.TabIndex = 5
+        ' 
         ' Form1
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(934, 402)
+        ClientSize = New Size(976, 530)
+        Controls.Add(txtK)
+        Controls.Add(PictureBox3)
         Controls.Add(ComboBox1)
         Controls.Add(PictureBox2)
         Controls.Add(PictureBox1)
         Controls.Add(TextBox1)
         Name = "Form1"
-        Text = "Form1"
+        Text = "s"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
         CType(PictureBox2, ComponentModel.ISupportInitialize).EndInit()
+        CType(PictureBox3, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -82,5 +103,7 @@ Partial Class Form1
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents PictureBox3 As PictureBox
+    Friend WithEvents txtK As TextBox
 
 End Class
