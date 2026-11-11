@@ -16,8 +16,12 @@ Public Class Form1
         ComboBox1.Items.Add("7. Binary Image")
         ComboBox1.Items.Add("8. Zero-Order Hold")
         ComboBox1.Items.Add("9. First-Order Hold")
-        ComboBox1.Items.Add("10. Apply Convolution (k x k)")
+        ComboBox1.Items.Add("10. Apply Convolution")
         ComboBox1.Items.Add("11. Add Two Images")
+        ComboBox1.Items.Add("12. Average Two Images")
+        ComboBox1.Items.Add("13. Subtract Two Images")
+        ComboBox1.Items.Add("14. Multiply Image by k")
+        ComboBox1.Items.Add("15. Divide Image by k")
         ComboBox1.Text = "Choose an Action..."
 
         PictureBox1.SizeMode = PictureBoxSizeMode.Zoom
@@ -112,6 +116,7 @@ Public Class Form1
 
                         Next
                     Next
+
                 Case 7, 8
                     Dim scale As Integer = 8
                     Dim cropW As Integer = Math.Min(60, x)
@@ -162,7 +167,7 @@ Public Class Form1
                     Next
 
                     result = New Bitmap(x, y)
-                    Me.Cursor = Cursors.WaitCursor
+                    Cursor = Cursors.WaitCursor
 
                     For i As Integer = 0 To x - 1
                         For j As Integer = 0 To y - 1
@@ -184,7 +189,7 @@ Public Class Form1
                                 Math.Min(255, CInt(Math.Round(sumB)))))
                         Next
                     Next
-                    Me.Cursor = Cursors.Default
+                    Cursor = Cursors.Default
 
                 Case 10
                     Dim dlg As New OpenFileDialog
@@ -217,6 +222,110 @@ Public Class Form1
                             Next
                         End Using
                     End Using
+
+                Case 11
+                    Dim dlg As New OpenFileDialog
+                    dlg.Title = "Select the second image"
+                    dlg.Filter = "Images|*.jpg;*.jpeg;*.png;*.bmp;*.gif"
+                    If dlg.ShowDialog() <> DialogResult.OK Then
+                        ComboBox1.SelectedIndex = -1
+                        Exit Sub
+                    End If
+
+                    Using tmp As Image = Image.FromFile(dlg.FileName)
+                        Using img2 As New Bitmap(tmp, x, y)
+
+                            Dim old3 As Image = PictureBox3.Image
+                            PictureBox3.Image = New Bitmap(img2)
+                            If old3 IsNot Nothing Then old3.Dispose()
+
+                            result = New Bitmap(x, y)
+                            Dim pixel2 As Color
+
+                            For i As Integer = 0 To x - 1
+                                For j As Integer = 0 To y - 1
+                                    pixel = color_pic.GetPixel(i, j)
+                                    pixel2 = img2.GetPixel(i, j)
+                                    r = (CInt(pixel.R) + pixel2.R) \ 2
+                                    g = (CInt(pixel.G) + pixel2.G) \ 2
+                                    b = (CInt(pixel.B) + pixel2.B) \ 2
+                                    result.SetPixel(i, j, Color.FromArgb(r, g, b))
+                                Next
+                            Next
+                        End Using
+                    End Using
+
+                Case 12
+                    Dim dlg As New OpenFileDialog
+                    dlg.Title = "Select the second image"
+                    dlg.Filter = "Images|*.jpg;*.jpeg;*.png;*.bmp;*.gif"
+                    If dlg.ShowDialog() <> DialogResult.OK Then
+                        ComboBox1.SelectedIndex = -1
+                        Exit Sub
+                    End If
+
+                    Using tmp As Image = Image.FromFile(dlg.FileName)
+                        Using img2 As New Bitmap(tmp, x, y)
+
+                            Dim old3 As Image = PictureBox3.Image
+                            PictureBox3.Image = New Bitmap(img2)
+                            If old3 IsNot Nothing Then old3.Dispose()
+
+                            result = New Bitmap(x, y)
+                            Dim pixel2 As Color
+
+                            For i As Integer = 0 To x - 1
+                                For j As Integer = 0 To y - 1
+                                    pixel = color_pic.GetPixel(i, j)
+                                    pixel2 = img2.GetPixel(i, j)
+                                    r = Math.Max(0, CInt(pixel.R) - pixel2.R)
+                                    g = Math.Max(0, CInt(pixel.G) - pixel2.G)
+                                    b = Math.Max(0, CInt(pixel.B) - pixel2.B)
+                                    result.SetPixel(i, j, Color.FromArgb(r, g, b))
+                                Next
+                            Next
+                        End Using
+                    End Using
+
+                Case 13
+                    Dim k As Double
+                    If Not Double.TryParse(txtK.Text.Trim(), k) Then
+                        MessageBox.Show("Enter a valid number for k in the textbox.")
+                        ComboBox1.SelectedIndex = -1
+                        Exit Sub
+                    End If
+
+                    result = New Bitmap(x, y)
+
+                    For i As Integer = 0 To x - 1
+                        For j As Integer = 0 To y - 1
+                            pixel = color_pic.GetPixel(i, j)
+                            r = Math.Min(255, Math.Max(0, CInt(Math.Round(pixel.R * k))))
+                            g = Math.Min(255, Math.Max(0, CInt(Math.Round(pixel.G * k))))
+                            b = Math.Min(255, Math.Max(0, CInt(Math.Round(pixel.B * k))))
+                            result.SetPixel(i, j, Color.FromArgb(r, g, b))
+                        Next
+                    Next
+
+                Case 14
+                    Dim k As Double
+                    If Not Double.TryParse(txtK.Text.Trim(), k) OrElse k = 0 Then
+                        MessageBox.Show("Enter a non-zero number for k in the textbox.")
+                        ComboBox1.SelectedIndex = -1
+                        Exit Sub
+                    End If
+
+                    result = New Bitmap(x, y)
+
+                    For i As Integer = 0 To x - 1
+                        For j As Integer = 0 To y - 1
+                            pixel = color_pic.GetPixel(i, j)
+                            r = Math.Min(255, Math.Max(0, CInt(Math.Round(pixel.R / k))))
+                            g = Math.Min(255, Math.Max(0, CInt(Math.Round(pixel.G / k))))
+                            b = Math.Min(255, Math.Max(0, CInt(Math.Round(pixel.B / k))))
+                            result.SetPixel(i, j, Color.FromArgb(r, g, b))
+                        Next
+                    Next
 
             End Select
 
